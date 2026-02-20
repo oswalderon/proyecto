@@ -9,12 +9,12 @@ Breadboard & Jumper Wires: ($5). For connecting everything without soldering.
 2. The AWS Infrastructure (Serverless & Free Tier)
 You can build this entire pipeline using "Serverless" services, meaning you only pay for what you use (which, for a school project, will likely be $0).
 
-Component	            Service	              Role
+Component	          Service	            Role
 Ingestion	          AWS IoT Core	        Receives data from your ESP32 via MQTT (a lightweight IoT protocol).
 Processing	          IoT Rules Engine	    Evaluates data (e.g., IF temp > 30C) and triggers the next step.
-Storage	              Amazon DynamoDB	     A NoSQL database to store every reading for history/logging.
-Alerting	          Amazon SNS	          Sends an Email or SMS alert if a threshold is hit.
-Action	              AWS Lambda	         A small script that runs automatically to "process" data or trigger a physical action (like turning on a fan).
+Storage	              Amazon DynamoDB	    A NoSQL database to store every reading for history/logging.
+Alerting	          Amazon SNS	        Sends an Email or SMS alert if a threshold is hit.
+Action	              AWS Lambda	        A small script that runs automatically to "process" data or trigger a physical action (like turning on a fan).
 
 
 3. How the Project Works (The "Job" Flow)
