@@ -1,0 +1,46 @@
+Building an IoT environmental monitor is a classic "Hello World" project that perfectly fits your requirements. Since you are on a budget, you can use high-performance but low-cost microcontrollers and leverage the AWS Free Tier to keep your infrastructure costs at near zero.
+
+1. The Hardware (Low-Cost Strategy)
+To keep costs under $15–$20, the ESP32 or Raspberry Pi Pico W are your best options.
+Microcontroller: ESP32 Development Board ($5–$8). It has built-in Wi-Fi and enough power to handle the encryption required by AWS.
+Sensor: DHT11 or DHT22 ($3–$5). These measure both temperature and humidity.
+Breadboard & Jumper Wires: ($5). For connecting everything without soldering.
+
+2. The AWS Infrastructure (Serverless & Free Tier)
+You can build this entire pipeline using "Serverless" services, meaning you only pay for what you use (which, for a school project, will likely be $0).
+
+Component	            Service	              Role
+Ingestion	            AWS IoT Core	        Receives data from your ESP32 via MQTT (a lightweight IoT protocol).
+Processing	          IoT Rules Engine	    Evaluates data (e.g., IF temp > 30C) and triggers the next step.
+Storage	              Amazon DynamoDB	      A NoSQL database to store every reading for history/logging.
+Alerting	            Amazon SNS	          Sends an Email or SMS alert if a threshold is hit.
+Action	              AWS Lambda	          A small script that runs automatically to "process" data or trigger a physical action (like turning on a fan).
+
+
+3. How the Project Works (The "Job" Flow)
+
+Step A: Data Collection & Upload
+Your ESP32 reads the temperature, formats it into a small JSON snippet, and sends it to AWS:
+
+{
+  "device_id": "Classroom_Sensor_01",
+  "temperature": 24.5,
+  "humidity": 45
+}
+
+Step B: The Automated Rule
+In the AWS IoT console, you create a Rule using a SQL-like syntax:
+SELECT * FROM 'device/data' WHERE temperature > 30
+
+Step C: The Alert & Action
+If the rule is triggered:
+Alert: SNS sends an email to your phone: "Warning: High Temperature Detected!"
+Action: A Lambda function can send a command back to the ESP32 to turn on an LED or a small 5V DC motor (acting as a "fan").
+
+
+4. Key Tips for Success
+AWS Free Tier: Make sure you use the "Always Free" or "12 Months Free" versions of these services. For example, DynamoDB gives you 25GB of storage for free forever.
+Security: AWS IoT Core requires "Certificates" (small files) to be loaded onto your device. This is the hardest part for beginners, but it ensures no one can hack your sensor.
+Simulation: If you can't buy the hardware yet, you can use the MQTT Test Client inside the AWS Console to "pretend" to be a device and test your database and alerts.
+
+
